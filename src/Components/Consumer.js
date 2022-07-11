@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect, useState } from 'react'
 
-const ConstruirButton = ({url, page, consumirApi})=>{
+const ConstruirButton = ({pageNum, url, page, consumirApi})=>{
+    console.log(pageNum)
     return (
-        <button onClick={()=> consumirApi(url, page)}>pagina{page}</button>
+        <button disabled={(page === pageNum) ? true : false} onClick={()=> consumirApi(url, page)}>pagina{page}</button>
     )
 }
 export const Consumer = () => {
@@ -35,17 +36,18 @@ export const Consumer = () => {
   return (
     <div>
         <h3>Total paginas: {totalPage} - <button onClick={()=> setVista(prev => !prev)}>{(vista) ? 'Ocultar' : 'Ver'}</button></h3>
+        <h4>Pagina numero: {page}</h4>
       {vista && (
         <div className="buttones">
             {cargar.map((item, indice) => (
                <Fragment key={indice}>
-                <ConstruirButton url={url} page={item} consumirApi={consumirApi} />
+                <ConstruirButton pageNum={page} url={url} page={item} consumirApi={consumirApi} />&nbsp;
                </Fragment>
             ))}
         </div>
       )}
 
-        <table>
+        <table className='table'>
             <thead>
                 <tr>
                     <th>id</th>

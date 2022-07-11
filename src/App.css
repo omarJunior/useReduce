@@ -37,6 +37,10 @@
   }
 }
 
+.table{
+  width: 100%;
+}
+
 .buttones{
   margin-bottom: 10px;
 }
