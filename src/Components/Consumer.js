@@ -25,12 +25,47 @@ export const Consumer = () => {
         setUsers(resp.data)
         setTotalPage(resp.total_pages)
         setPage(resp.page)
-        console.log("Consumo la api xd")
         const arr = []
         for(let x = 1; x <= resp.total_pages; x++){
             arr.push(x)
         }
         setCargar(arr)
+    }
+
+    const guardarLocal = (id, email, first_name, last_name)=>{
+        const arr = []
+        const usuarios = JSON.parse(localStorage.getItem("usuarios"))
+        if(usuarios != null){
+            //ya existe
+            const findend = usuarios.find(item => item.id === id)
+            if(findend === undefined){
+                usuarios.push({
+                    id, email, first_name, last_name
+                })
+                localStorage.setItem("usuarios", JSON.stringify(usuarios))
+            }else{
+                return alert("Ya ese dato existe en el localstorage")
+            }
+           
+        }else{
+            arr.push({id, email, first_name, last_name})
+            localStorage.setItem("usuarios", JSON.stringify(arr))
+        }
+    }
+
+    const eliminarLocal = (id)=>{
+        const usuarios = JSON.parse(localStorage.getItem("usuarios"))
+        if(usuarios != null){
+            const filtro_existe = usuarios.filter(item => item.id === id)
+            if(filtro_existe.length === 0){
+                return alert("Ese dato no existe para eliminar")
+            }
+            const filtro = usuarios.filter(item => item.id !== id)
+            localStorage.setItem("usuarios", JSON.stringify(filtro))
+            return alert("Eliminado correctamente")
+        }else{
+            return alert("No hay ningun elemento para eliminar")
+        }
     }
 
   return (
@@ -67,8 +102,8 @@ export const Consumer = () => {
                         <td>{item.last_name}</td>
                         <td><img width="50px" src={item.avatar} alt="img.jpg" /></td>
                         <td>
-                            <button onClick={()=> ""}>Eliminar</button> &nbsp;
-                            <button onClick={()=> ""}>Guardar</button>
+                            <button onClick={()=> eliminarLocal(item.id)}>Eliminar</button> &nbsp;
+                            <button onClick={()=> guardarLocal(item.id, item.email, item.first_name, item.last_name)}>Guardar</button>
                         </td>
                     </tr>
                 ))}
